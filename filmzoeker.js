@@ -1,13 +1,21 @@
 const movieUnorderedList = document.getElementById('movie-list');
 const radioButtons = document.getElementsByName('movie-filter');
 
+//create url by adding id at the end
+const getImdbURL = (id) => {
+    return "https://www.imdb.com/title/" + id; 
+}
+
 //function to add movies to the dom
 const addMoviesToDom = (movies) => {
     const movieListItems = movies.map((movie) => {
+        const anchor = document.createElement('a');
         const listItem = document.createElement('li');
         const image = document.createElement('img');
         image.src = movie.Poster;
-        listItem.appendChild(image);
+        anchor.href = getImdbURL(movie.imdbID);
+        anchor.appendChild(image);
+        listItem.appendChild(anchor);
         return listItem;
     });
     movieListItems.forEach(item => {
@@ -58,6 +66,8 @@ const handleChangeEvent  = (event) => {
             addMoviesToDom(filterMovies("Batman"));
             break;
         default:
+            removeMoviesFromDom();
+            addMoviesToDom(movies.Movies);
             break;
     }
 }
@@ -67,7 +77,6 @@ console.log(radioButtons);
 radioButtons.forEach((button) => {
     button.addEventListener('change', () => handleChangeEvent(event));
 })
-
 
 //add movies to ul
 addMoviesToDom(movies.Movies);
